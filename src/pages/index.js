@@ -16,7 +16,7 @@ export default function Home() {
     const mediaRecorder = useRef(null);
     const chunks = useRef([]);
     const [coordinates,setCoordinates] = useState(null);
-    const [places,setPlaces] = useState([])
+    const [places,setPlaces] = useState(null)
     let timeout;
 
     const getCoordinates = () => {
@@ -94,8 +94,16 @@ export default function Home() {
         if(coordinates){
             axios.get('/api/get-location',{params: {location: `${coordinates.latitude},${coordinates.longitude}`,type: 'cafe'}})
                 .then(response=>{
-                    if (response?.data?.status==="OK"){
-                       setPlaces(response.data.results)
+                    switch (response?.data?.status) {
+                        case "ZERO_RESULTS":
+                            setPlaces([])
+                            break;
+                        case "OK":
+                            setPlaces(response.data.results)
+                            break;
+                            default:
+                                setPlaces([])
+                            break
                     }
                 })
                 .catch(err=>console.log(err))
@@ -124,7 +132,7 @@ export default function Home() {
             {
                 isSupported ?
                     <>
-                        {places.length===0 ? <Spinner /> :  <Businesses businesses={places}/>}
+                        {!places ? <Spinner /> :  places.length > 0 ? <Businesses places={places}/> : <div className="no-places">No places found</div>}
                         {songData && !listening && <SongInfo {...songData} />}
                         {loading ? <Spinner/> : <div onClick={() => setListening(current => !current)}
                                                      className={listening ? 'pulsating-circle' : 'circle'}></div>}

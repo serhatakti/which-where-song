@@ -79,3 +79,8 @@ body {
     transform: scale(.8);
   }
 }
+
+.no-places {
+   color: white;
+  font-size: 14px;
+}
