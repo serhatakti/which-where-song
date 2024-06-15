@@ -105,6 +105,7 @@ export default function Home() {
                                 setPlaces([])
                             break
                     }
+                    console.log("data",response.data)
                 })
                 .catch(err=>console.log(err))
         }
@@ -132,7 +133,8 @@ export default function Home() {
             {
                 isSupported ?
                     <>
-                        {!places ? <Spinner /> :  places.length > 0 ? <Businesses places={places}/> : <div className="no-places">No places found</div>}
+                        {!places && <Spinner />}
+                        {places && <>{places?.length > 0 ? <Businesses businesses={places} /> : <div className="no-places">Yakınınızda konum bulunamadı</div>}</>}
                         {songData && !listening && <SongInfo {...songData} />}
                         {loading ? <Spinner/> : <div onClick={() => setListening(current => !current)}
                                                      className={listening ? 'pulsating-circle' : 'circle'}></div>}
