@@ -45,7 +45,7 @@ export default function Home() {
                 const audioFile = new File([recordedBlob], 'voice.wav', { type: 'audio/wav' });
                 const formData = new FormData(); // preparing to send to the server
                 formData.append('file', audioFile);
-                formData.append('api_token', '24f3760f6a3e43beb5d1012fa48f14bc');
+                formData.append('api_token', process.env.NEXT_PUBLIC_AUDD_TOKEN);
                 formData.append('return', 'apple_music,spotify,deezer,napster');
                 setLoading(true)
                 axios.post('https://api.audd.io/', formData, {headers: {'Content-Type': 'multipart/form-data'}})
